@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "GranadaITELEC1C/1.0.0": {
+        "runtime": {
+          "GranadaITELEC1C.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GranadaITELEC1C/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
