@@ -6,9 +6,9 @@
 <table class="table table-dark">
 
     <tr>
-        <th colspan="7">Instructor</th>
+        <th colspan="8">Instructor</th>
     </tr>
-    dsdasa
+  
     <tr>
         <td>ID</td>
         <td>Firstname</td>
@@ -16,7 +16,8 @@
         <td>IsTenured</td>
         <td>Rank</td>
         <td>HiringDate</td>
-        <td></td>
+        <td>Details</td>
+        <td>Update</td>
 
 
     </tr>
@@ -29,7 +30,8 @@
             <td>@instructor.IsTenured</td>
             <td>@instructor.rank</td>
             <td>@instructor.HiringDate</td>
-            <td><a asp-action="ShowDetail" asp-route-id="@instructor.Id">Show Details</a></td>
+            <td><a asp-action="ShowDetail" asp-route-id="@instructor.Id" class="btn btn-primary">Show Details</a></td>
+            <td><a asp-action="UpdateInstructor" asp-route-id="@instructor.Id" class="btn btn-primary">Update Instructor</a></td>
 
         </tr>
     }

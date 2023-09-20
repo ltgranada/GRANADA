@@ -33,6 +33,51 @@ using Microsoft.AspNetCore.Mvc;
             return View(instructor);
 
         return NotFound();
+
+    }
+
+        [HttpGet]
+        public IActionResult AddInstructor()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddInstructor(Instructor newInstructor)
+        {
+            InstructorList.Add(newInstructor);
+            return View("Index", InstructorList);
+        }
+
+    [HttpGet]
+        public IActionResult UpdateInstructor(int id)
+        {
+        //Search for the instructor whose id matches the given id
+        Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == id);
+
+        if (instructor != null)//was an student found?
+            return View(instructor);
+
+        return NotFound();
+    }
+
+    [HttpPost]
+    public IActionResult UpdateInstructor(Instructor instructorChanges)
+    {
+        Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == instructorChanges.Id);
+        if (instructor != null)
+        {
+            instructor.Id = instructorChanges.Id;
+            instructor.FirstName = instructorChanges.FirstName;
+            instructor.LastName = instructorChanges.LastName;
+            instructor.IsTenured = instructorChanges.IsTenured;
+            instructor.rank = instructorChanges.rank;
+            instructor.HiringDate = instructorChanges.HiringDate;
+        }
+
+        return View("Index", InstructorList);
     }
 
 }
+
