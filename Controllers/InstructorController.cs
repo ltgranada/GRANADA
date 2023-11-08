@@ -31,15 +31,20 @@ using Microsoft.AspNetCore.Mvc;
         [HttpGet]
         public IActionResult AddInstructor()
         {
-
+           
             return View();
         }
 
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
+        if (!ModelState.IsValid)
+            return View();
+
+
         _dummyData.InstructorList.Add(newInstructor);
         return RedirectToAction("Index");
+
     }
 
     [HttpGet]

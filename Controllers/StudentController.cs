@@ -38,6 +38,10 @@ namespace GranadaITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
+
+            if (!ModelState.IsValid)
+                return View();
+
             _dummyData.StudentList.Add(newStudent);
             return RedirectToAction("Index");
         }

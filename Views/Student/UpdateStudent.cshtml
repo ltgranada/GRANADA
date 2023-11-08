@@ -3,27 +3,27 @@
 
 <form asp-action="UpdateStudent" asp-controller="Student" method="post">
     <div class="form-group">
-        <label asp-for="FirstName">First Name</label>
+        <label asp-for="FirstName"></label>
         <input asp-for="FirstName" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="LastName">Last Name</label>
+        <label asp-for="LastName"></label>
         <input asp-for="LastName" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="GPA">GPA</label>
+        <label asp-for="GPA"></label>
         <input asp-for="GPA" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="Course">Course</label>
+        <label asp-for="Course"></label>
         <select asp-for="Course" asp-items="@Html.GetEnumSelectList(typeof(Course))" class="form-control"></select>
     </div>
     <div class="form-group">
-        <label asp-for="AdmissionDate">Date of Admission</label>
+        <label asp-for="AdmissionDate"></label>
         <input asp-for="AdmissionDate" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="Email">Email address</label>
+        <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control"/>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
