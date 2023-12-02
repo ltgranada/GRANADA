@@ -1,25 +1,32 @@
-﻿using GranadaITELEC1C.Models;
+﻿using GranadaITELEC1C.Data;
+using GranadaITELEC1C.Models;
 using GranadaITELEC1C.Services;
+using GranadaITELEC1C.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-    public class InstructorController : Controller
+public class InstructorController : Controller
 {
-    private readonly IMyFakeDataService _dummyData;
+    private readonly AppDbContext _dbData;
 
-    public InstructorController(IMyFakeDataService dummyData)
-    {
-        _dummyData = dummyData;
-    }
+    public InstructorController(AppDbContext dbData)
+        {
+            _dbData = dbData;
+        }
+    
     public IActionResult Index()
     {
 
-        return View(_dummyData.InstructorList);
+        return View(_dbData.Instructors);
     }
 
     public IActionResult ShowDetail(int id)
     {
         //Search for the instructor whose id matches the given id
-        Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
+        Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.Id == id);
 
         if (instructor != null)//was an student found?
             return View(instructor);
@@ -39,19 +46,23 @@ using Microsoft.AspNetCore.Mvc;
         public IActionResult AddInstructor(Instructor newInstructor)
         {
         if (!ModelState.IsValid)
+        {
             return View();
+        }
+            _dbData.Instructors.Add(newInstructor);
+            _dbData.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
+        
 
-        _dummyData.InstructorList.Add(newInstructor);
-        return RedirectToAction("Index");
-
-    }
+    
 
     [HttpGet]
         public IActionResult UpdateInstructor(int id)
         {
         //Search for the instructor whose id matches the given id
-        Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
+        Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.Id == id);
 
         if (instructor != null)//was an student found?
             return View(instructor);
@@ -62,7 +73,7 @@ using Microsoft.AspNetCore.Mvc;
     [HttpPost]
     public IActionResult UpdateInstructor(Instructor instructorChanges)
     {
-        Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == instructorChanges.Id);
+        Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.Id == instructorChanges.Id);
         if (instructor != null)
         {
             instructor.Id = instructorChanges.Id;
@@ -71,6 +82,8 @@ using Microsoft.AspNetCore.Mvc;
             instructor.IsTenured = instructorChanges.IsTenured;
             instructor.rank = instructorChanges.rank;
             instructor.HiringDate = instructorChanges.HiringDate;
+           
+            _dbData.SaveChanges();
         }
 
         return RedirectToAction("Index");
@@ -79,7 +92,7 @@ using Microsoft.AspNetCore.Mvc;
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
+        Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.Id == id);
 
         if (instructor != null)//was an instructor found?
             return View(instructor);
@@ -89,16 +102,20 @@ using Microsoft.AspNetCore.Mvc;
     [HttpPost]
     public IActionResult Delete(Instructor newInstructor)
     {
-        Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == newInstructor.Id);
+        Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.Id == newInstructor.Id);
 
         if (instructor != null)
         {
-            _dummyData.InstructorList.Remove(instructor);
+            _dbData.Instructors.Remove(instructor);
+            _dbData.Instructors.Remove(newInstructor);
+            _dbData.SaveChanges();
             return RedirectToAction("Index");
         }
 
         return RedirectToAction("Index");
     }
+
+    
 
 }
 

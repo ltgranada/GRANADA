@@ -38,6 +38,21 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-action="Logout" asp-controller="Account">Logout</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-action="Login" asp-controller="Account">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Register" asp-controller="Account">Register new account</a>
+                </li>
+             }
             @RenderBody()
         </main>
     </div>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GranadaITELEC1C.Models;
 public enum Rank
@@ -27,4 +28,8 @@ public class Instructor
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Please enter your Hiring Date")]
     public DateTime HiringDate { get; set; }
+    [NotMapped]
+    public IFormFile? UploadedPhoto { get; set; }
+
+    
 }

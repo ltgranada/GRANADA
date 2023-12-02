@@ -1,0 +1,33 @@
+﻿@using GranadaITELEC1C.ViewModels
+@model RegisterViewModel
+
+<main id="main">
+<h1>Register a new account</h1>
+<form asp-action="Register" asp-controler="Account">
+    <div class="form-group" asp-validation-summary="All"></div> <div class="form-group">
+        <label asp-for="UserName"></label> <input asp-for="UserName">
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label> <input asp-for="Password">
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword">
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstName"></label> <input asp-for="FirstName">
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label> <input asp-for="LastName">
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email">
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone">
+    </div>
+    <input type="submit" value="Register Account" class="btn btn-primary" />
+</form>
+</main>

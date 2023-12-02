@@ -1,30 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GranadaITELEC1C.Services;
 using GranadaITELEC1C.Models;
+using GranadaITELEC1C.Data;
 
 namespace GranadaITELEC1C.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly IMyFakeDataService _dummyData;
-
-        public StudentController (IMyFakeDataService dummyData)
+        private readonly AppDbContext _dbData;
+        public StudentController(AppDbContext dbData)
         {
-            _dummyData = dummyData;
+            _dbData = dbData;
         }
+
+
         public IActionResult Index()
         {
 
-            return View(_dummyData.StudentList);
+            return View(_dbData.Students);
         }
 
-        public IActionResult ShowDetail(int id)
+        public IActionResult ShowDetails(int id)
         {
-            //Search for the student whose id matches the given id
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.Id == id);
+            //Search for the instructor whose id matches the given id
+            Student? student = _dbData.Students.FirstOrDefault(st => st.Id == id);
 
-            if (student != null)//was an student found?
+            if (student != null)
+            {
+                if (student.StudentProfilePhoto != null)
+                {
+                    string imageBase64Data = Convert.ToBase64String(student.StudentProfilePhoto);
+                    string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                    ViewBag.StudentProfilePhoto = imageDataURL;
+                }
+
                 return View(student);
+
+
+            }//was a student found?
 
             return NotFound();
         }
@@ -32,26 +45,38 @@ namespace GranadaITELEC1C.Controllers
         [HttpGet]
         public IActionResult AddStudent()
         {
+
             return View();
         }
-
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
-
             if (!ModelState.IsValid)
                 return View();
 
-            _dummyData.StudentList.Add(newStudent);
+            if (Request.Form.Files.Count > 0) // did a user upload a file?
+            {
+                var file = Request.Form.Files[0];
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms); //copy the file into a memory stream object
+                newStudent.StudentProfilePhoto = ms.ToArray(); // save bytes into newStudent
+                ms.Close();
+                ms.Dispose();
+            }
+
+
+            _dbData.Students.Add(newStudent);
+            _dbData.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        [HttpGet]   
+        [HttpGet]
         public IActionResult UpdateStudent(int id)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.Id == id);
+            //Search for the instructor whose id matches the given id
+            Student? student = _dbData.Students.FirstOrDefault(st => st.Id == id);
 
-            if (student != null)//was an student found?
+            if (student != null)//was an instructor found?
                 return View(student);
 
             return NotFound();
@@ -59,44 +84,47 @@ namespace GranadaITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateStudent(Student studentChanges)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.Id == studentChanges.Id);
+            Student? student = _dbData.Students.FirstOrDefault(st => st.Id == studentChanges.Id);
 
             if (student != null)
             {
                 student.FirstName = studentChanges.FirstName;
                 student.LastName = studentChanges.LastName;
                 student.Email = studentChanges.Email;
-                student.Course = studentChanges.Course;
-                student.GPA = studentChanges.GPA;
                 student.AdmissionDate = studentChanges.AdmissionDate;
+                student.GPA = studentChanges.GPA;
+                student.Course = studentChanges.Course;
+               
+                _dbData.SaveChanges(); // Save changes after making all the necessary updates
             }
 
             return RedirectToAction("Index");
         }
 
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.Id == id);
+            //Search for the instructor whose id matches the given id
+            Student? student = _dbData.Students.FirstOrDefault(st => st.Id == id);
 
-            if (student != null)//was an student found?
+            if (student != null)//was an instructor found?
                 return View(student);
 
             return NotFound();
         }
+
         [HttpPost]
         public IActionResult Delete(Student newStudent)
+
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.Id == newStudent.Id);
+            //Search for the instructor whose id matches the given id
+            Student? student = _dbData.Students.FirstOrDefault(st => st.Id == newStudent.Id);
 
-            if (student != null)
-            {
-                _dummyData.StudentList.Remove(student);
-                return View("Index", _dummyData.StudentList);
-            }
-
-            return View("Index", _dummyData.StudentList);
+            if (student != null)//was an instructor found?
+                _dbData.Students.Remove(student);
+            _dbData.SaveChanges();
+            return RedirectToAction("Index");
         }
-
     }
-}
+};

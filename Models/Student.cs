@@ -33,4 +33,6 @@ public class Student
 
     public string Email { get; set; }
 
+    public Byte[]? StudentProfilePhoto { get; set; }
+
 }
